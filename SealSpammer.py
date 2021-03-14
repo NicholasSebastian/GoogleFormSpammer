@@ -96,6 +96,8 @@ def createFilledURL():
             '1793079760': "Yes" if bool(random.getrandbits(1)) else "No", # monitoring
             '1867664525': difficulties_options[random.randint(0, 3)], # difficulties
             '679963689': "Yes" if bool(random.getrandbits(1)) else "No", # user interface
+            '1174718006': "Yes" if bool(random.getrandbits(1)) else "No", # bluetooth
+            '1819983885': "Yes" if bool(random.getrandbits(1)) else "No", # antivirus
             '2135580095': "Yes" if know_policies else "No" # policies
         })
 
@@ -161,6 +163,8 @@ while True:
 # monitoring: 1793079760
 # difficulties: 1867664525
 # user_interface: 679963689
+# bluetooth: 1174718006
+# antivirus: 1819983885
 # policies: 2135580095
 
 # IF YOU'RE NOT USING PEDULI LINDUNGI
