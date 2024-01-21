@@ -2,19 +2,11 @@ import requests
 import random
 from time import sleep, time
 
-# ===== CONSTANTS =====
-
-base_url = "https://docs.google.com/forms/d/e/1FAIpQLScZ_EuVy1EZv6_TJ6HsRY7MUgVfXyHc1guXJnY-X10QOc_THQ/formResponse"
-delay = 0.4
-
-# The possible choices for text-based answers.
-age_ranges = ["11-21", "22-34"]
-education_levels = ["Less than high school", "High school graduate", "College", "Bachelor's degree"]
-years = ["6-10 years", "More than 10 years"]
-air_change = ["Worsened", "A little bit improved", "Remained the same", "Improved a lot"]
-participation = ["Never", "Rarely", "Occasionally", "Frequently", "Always"]
-
 # ===== UTILITY FUNCTIONS =====
+
+# Encodes the given values into a list of valid url params.
+def encode(*arr: str):
+    return [value.replace(" ", "+").replace("'", "%27") for value in arr]
 
 # Generates a random boolean.
 def randbool():
@@ -34,8 +26,21 @@ def variate(value: int, lower_limit: int, upper_limit: int):
 def wait(delay: float, start: float):
     now = time()
     elapsed = now - start
-    sleep(max(0, delay - elapsed))
+    remaining = max(0, delay - elapsed)
+    sleep(remaining)
     return now
+
+# ===== CONSTANTS =====
+
+base_url = "https://docs.google.com/forms/d/e/1FAIpQLScZ_EuVy1EZv6_TJ6HsRY7MUgVfXyHc1guXJnY-X10QOc_THQ/formResponse"
+delay = 0.4
+
+# The possible choices for text-based answers.
+age_ranges = encode("11-21", "22-34")
+education_levels = encode("Less than high school", "High school graduate", "College", "Bachelor's degree")
+years = encode("6-10 years", "More than 10 years")
+air_change = encode("Worsened", "A little bit improved", "Remained the same", "Improved a lot")
+participation = encode("Never", "Rarely", "Occasionally", "Frequently", "Always")
 
 # ===== ANSWER GENERATION =====
 
@@ -106,12 +111,10 @@ def generate_answers() -> 'dict[str, str]':
     }
 
 # Formats the data into a URL to submit the form data.
-def generate_url():
-    data = generate_answers()
+def generate_url(data: 'dict[str, str]'):
     url = base_url + "?pageHistory=0"
     for key, value in data.items():
-        encoded_value = str(value) if type(value) == int else value.replace(" ", "+").replace("'", "%27")
-        url += "&entry." + key + "=" + encoded_value
+        url += "&entry." + key + "=" + str(value)
     return url
 
 # ===== THE ACTUAL PROGRAM LOOP =====
@@ -121,7 +124,8 @@ last_request = time()
 
 while True:
     try:
-        url = generate_url()
+        data = generate_answers()
+        url = generate_url(data)
         response = requests.get(url)
         if response.ok:
             count += 1
