@@ -14,7 +14,7 @@ def randbool():
 
 # Generates a random numeric value biased towards the given value.
 class BiasedRandom:
-    def __init__(self, bias: int, lower_limit: int, upper_limit: int, bias_factor = 2):
+    def __init__(self, bias: int, lower_limit: int, upper_limit: int, bias_factor = 3):
         if lower_limit > bias or upper_limit < bias: 
             raise Exception("Cannot create an instance of BiasedRandom with invalid arguments.")
         dist = max(upper_limit - bias, bias - lower_limit)
@@ -69,16 +69,16 @@ def generate_answers() -> 'dict[str, str]':
 
     # Random answers are fine for these.
     bothered = bias4.randint()
-    industrial_emissions = randint(1, 5)
-    vehicle_traffic = randint(1, 5)
-    waste_burning = randint(1, 5)
-    agriculture = randint(1, 5)
-    construction = randint(1, 5)
-    news_outlets = randint(1, 5)
-    social_media = randint(1, 5)
-    government = randint(1, 5)
-    organizations = randint(1, 5)
-    mobile_apps = randint(1, 5)
+    industrial_emissions = bias4.randint()
+    vehicle_traffic = bias4.randint()
+    waste_burning = bias4.randint()
+    agriculture = bias4.randint()
+    construction = bias4.randint()
+    news_outlets = bias4.randint()
+    social_media = bias4.randint()
+    government = bias4.randint()
+    organizations = bias4.randint()
+    mobile_apps = bias4.randint()
 
     # These should match the "bothered" scale to make sense.
     concerned = variate(bothered, 1, 5)
@@ -86,14 +86,14 @@ def generate_answers() -> 'dict[str, str]':
 
     # More random answers.
     improvement = air_change[randint(0, 3)]
-    awareness = randint(1, 5)
+    awareness = bias4.randint()
     participated = participation[randint(0, 4)]
-    believe_strict = randint(1, 5)
-    education_campaigns = randint(1, 5)
-    community_workshops = randint(1, 5)
-    strict_enforcement = randint(1, 5)
-    media_strategies = randint(1, 5)
-    sustainable_transport = randint(1, 5)
+    believe_strict = bias4.randint()
+    education_campaigns = bias4.randint()
+    community_workshops = bias4.randint()
+    strict_enforcement = bias4.randint()
+    media_strategies = bias4.randint()
+    sustainable_transport = bias4.randint()
 
     # Map the answers onto their corresponding form IDs.
     return {
@@ -141,7 +141,7 @@ for i in range(no_of_submissions):
         url = generate_url(data)
         response = requests.get(url)
         if response.ok:
-            print("Submitted " + str(i) + " times.")
+            print("Submitted " + str(i + 1) + " times.")
             last_request = wait(delay, last_request)
         else: 
             print(response.reason)
